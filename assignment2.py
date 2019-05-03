@@ -1,31 +1,56 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 import vcf
 
-__author__ = 'XXX'
+__author__ = 'Dominic Viehböck'
 
 
 class Assignment2:
     
-    def __init__(self):
+    def __init__(self, file_name="chr22.vcf"):
+        self.filename = file_name
         ## Check if pyvcf is installed
         print("PyVCF version: %s" % vcf.VERSION)
-        
+        # Create reader object
+        self.reader = self.get_reader()#vcf.Reader(open(self.filename), 'r')
+        self.reads = self.get_reads(self.reader)
+
+    def get_reads(self, reader):
+        reads = []
+        for record in reader:
+            reads.append(record)
+        return reads
+
+    def get_reader(self):
+        reader = vcf.Reader(open(self.filename), 'r')
+        return reader
 
     def get_average_quality_of_file(self):
         '''
         Get the average PHRED quality of all variants
         :return:
         '''    
-        print("TODO")
+        i = 0
+        averageQ = 0
+
+        for record in self.reads:
+            i += 1
+            averageQ += record.QUAL
+        phred = averageQ / i
+
+        print('The average PHRED quality of all variants is: ', str(phred))
         
         
-    def get_total_number_of_variants_of_file(self):
+    def get_total_number_of_variants_of_file(self, file_name="chr22.vcf"):
         '''
         Get the total number of variants
         :return: total number of variants
         '''
-        print("TODO")
+        reader = vcf.Reader(open(file_name),'r')
+        i = 0
+        for record in reader:
+            i += 1
+        print("Total number of variants ({}): ".format(file_name), i)
     
     
     def get_variant_caller_of_vcf(self):
@@ -33,23 +58,23 @@ class Assignment2:
         Return the variant caller name
         :return: 
         '''
-        print("TODO")
-        
         
     def get_human_reference_version(self):
         '''
         Return the genome reference version
         :return: 
         '''
-        print("TODO")
-        
         
     def get_number_of_indels(self):
         '''
         Return the number of identified INDELs
         :return:
         '''
-        print("TODO")
+        i = 0
+        for record in self.reads:
+            if record.is_indel:
+                i += 1
+        print('Number of identified INDELs: ', i)
         
 
     def get_number_of_snvs(self):
@@ -57,14 +82,23 @@ class Assignment2:
         Return the number of SNVs
         :return: 
         '''
-        print("TODO")
+        i = 0
+        # According to documentation attribute .is_snp is similar to snv
+        for record in self.reads:
+            if record.is_snp:
+                i += 1
+        print('Number of SNVs: ', i)
         
     def get_number_of_heterozygous_variants(self):
         '''
         Return the number of heterozygous variants
         :return: 
         '''
-        print("TODO")
+        i = 0
+        for record in self.reads:
+            if record.num_het:
+                i += 1
+        print('Number of heterozygous variants: ', i)
         
     
     def merge_chrs_into_one_vcf(self):
@@ -72,14 +106,24 @@ class Assignment2:
         Creates one VCF containing all variants of chr21 and chr22
         :return:
         '''
-        print("TODO")
-        
-        print("Number of total variants")
-        
+        filenames = ['chr22.vcf', 'chr21.vcf']
+        with open('combined.vcf', 'w') as outfile:
+            for fname in filenames:
+                with open(fname) as infile:
+                    for line in infile:
+                        outfile.write(line)
+
+        num_variants = self.get_total_number_of_variants_of_file(file_name="combined.vcf")
     
     def print_summary(self):
-        print("Print all results here")
-    
+        self.get_average_quality_of_file()
+        self.get_total_number_of_variants_of_file()
+        #self.get_variant_caller_of_vcf()
+        #self.get_human_reference_version()
+        self.get_number_of_indels()
+        self.get_number_of_snvs()
+        self.get_number_of_heterozygous_variants()
+        self.merge_chrs_into_one_vcf()
     
 def main():
     print("Assignment 2")
