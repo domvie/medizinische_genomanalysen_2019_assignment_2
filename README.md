@@ -13,6 +13,10 @@
 * VCF chr22: [http://hmd.ait.ac.at/medgen2019/chr22.vcf](http://hmd.ait.ac.at/medgen2019/chr22.vcf)
 * All datasets [http://hmd.ait.ac.at/medgen2019/](http://hmd.ait.ac.at/medgen2019/)
 
+## Data backup
+* VCF chr21: [http://hmd.ait.ac.at/medgen2019/chr21_new.vcf](http://hmd.ait.ac.at/medgen2019/chr21_new.vcf)
+* VCF chr22: [http://hmd.ait.ac.at/medgen2019/chr22_new.vcf](http://hmd.ait.ac.at/medgen2019/chr22_new.vcf)
+
 ## Tools
 * pyvcf (http://pyvcf.readthedocs.io/en/latest/)
 
